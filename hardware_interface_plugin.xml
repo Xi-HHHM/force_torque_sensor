@@ -4,7 +4,9 @@
 			FTS interface
 		</description>
 	</class>
-
+</library>
+    
+<library path="lib/libforce_torque_sensor_handler">    
 	<class name="force_torque_sensor/ForceTorqueSensorHWHandler" type="force_torque_sensor::ForceTorqueSensorHWHandler" base_class_type="hardware_interface::SensorHW"> 
 	  <description>
 	    Force Torque Sensor Handler

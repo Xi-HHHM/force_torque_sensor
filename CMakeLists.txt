@@ -70,7 +70,7 @@ catkin_package(
  INCLUDE_DIRS include
  CATKIN_DEPENDS geometry_msgs iirob_filters message_runtime roscpp std_msgs std_srvs rospy realtime_tools pluginlib tf2 tf2_ros hardware_interface
  DEPENDS Eigen3
- LIBRARIES ${PROJECT_NAME} ${PROJECT_NAME}_sim
+ LIBRARIES ${PROJECT_NAME} ${PROJECT_NAME}_sim ${PROJECT_NAME}_handler
 )
 
 ###########
@@ -88,7 +88,7 @@ include_directories(
 add_library(${PROJECT_NAME}
 	src/force_torque_sensor_handle.cpp
 	src/force_torque_sensor_hw.cpp
-	src/force_torque_sensor_hw_handler.cpp
+#	src/force_torque_sensor_hw_handler.cpp
 )
 add_dependencies(${PROJECT_NAME}
   ${PROJECT_NAME}_gencfg  # For dynamic_reconfigure
@@ -101,13 +101,16 @@ target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${Eigen3_LIBRARIES})
 add_library(${PROJECT_NAME}_sim src/force_torque_sensor_sim.cpp )
 target_link_libraries(${PROJECT_NAME}_sim ${catkin_LIBRARIES} ${Eigen3_LIBRARIES})
 
+add_library(${PROJECT_NAME}_handler src/force_torque_sensor_hw_handler.cpp )
+target_link_libraries(${PROJECT_NAME}_handler ${catkin_LIBRARIES} ${Eigen3_LIBRARIES})
+
 add_executable(${PROJECT_NAME}_node src/force_torque_sensor_node.cpp)
 target_link_libraries(${PROJECT_NAME}_node ${PROJECT_NAME} ${catkin_LIBRARIES} ${Eigen3_LIBRARIES})
 
 #############
 ## Install ##
 #############
-install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_sim ${PROJECT_NAME}_node
+install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_sim ${PROJECT_NAME}_node ${PROJECT_NAME}_handler
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

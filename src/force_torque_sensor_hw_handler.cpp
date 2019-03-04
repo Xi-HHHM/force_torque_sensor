@@ -47,36 +47,40 @@
 
 using namespace force_torque_sensor;
 
-ForceTorqueSensorHWHandler::ForceTorqueSensorHWHandler() : calibration_params_ {nh_.getNamespace() + "/Calibration/Offset"}, CS_params_ {nh_.getNamespace() }, HWComm_params_ {nh_.getNamespace() + "/HWComm"}, FTS_params_ {nh_.getNamespace() + "/FTS"}, pub_params_ {nh_.getNamespace() + "/Publish"}, node_params_ {nh_.getNamespace() + "/Node"}, gravity_params_ {nh_.getNamespace() + "/GravityCompensation/params"} {}
+//ForceTorqueSensorHWHandler::ForceTorqueSensorHWHandler() : calibration_params_ {nh_.getNamespace() + "/Calibration/Offset"}, CS_params_ {nh_.getNamespace() }, HWComm_params_ {nh_.getNamespace() + "/HWComm"}, FTS_params_ {nh_.getNamespace() + "/FTS"}, pub_params_ {nh_.getNamespace() + "/Publish"}, node_params_ {nh_.getNamespace() + "/Node"}, gravity_params_ {nh_.getNamespace() + "/GravityCompensation/params"} {ROS_WARN("0");}
+ForceTorqueSensorHWHandler::ForceTorqueSensorHWHandler(){};
 
 bool ForceTorqueSensorHWHandler::init(ros::NodeHandle &root_nh, ros::NodeHandle &sensor_hw_nh)
-{
+{ROS_WARN("1");
     node_params_.fromParamServer();
-
+ROS_WARN("2");
     sensor_loader_.reset(new pluginlib::ClassLoader<hardware_interface::ForceTorqueSensorHW> ("force_torque_sensor", "hardware_interface::ForceTorqueSensorHW"));
+ROS_WARN("3");
     if (!node_params_.sensor_hw.empty()) {
+ROS_WARN("4");
         try {
             sensor_.reset(sensor_loader_->createUnmanagedInstance(node_params_.sensor_hw));
             ROS_INFO_STREAM("Sensor type " << node_params_.sensor_hw << " was successfully loaded.");
-
+ROS_WARN("5");
             p_Ftc = sensor_.get();
             prepareNode(node_params_.transform_frame);
         } catch (pluginlib::PluginlibException &e) {
             ROS_ERROR_STREAM("Plugin failed to load:" << e.what());
         }
-    } else {
+    } else {ROS_WARN("6");
         ROS_ERROR_STREAM("Failed to getParam 'sensor_hw' (namespace: " << nh_.getNamespace() << ").");
         ROS_ERROR("Sensor hardware failed to load");
         return false;
     }
-
+ROS_WARN("7");
     last_publish_time_ = ros::Time::now();
     last_pull_time_ = ros::Time::now();
 
     hardware_interface::ForceTorqueSensorHandle fts_handle(FTS_params_.fts_name, node_params_.sensor_frame, interface_force_, interface_torque_);
     fts_interface_.registerHandle(fts_handle);
     registerInterface(&fts_interface_);
-
+ROS_WARN("8");
+	ros::shutdown();
     return true;
 }
 
