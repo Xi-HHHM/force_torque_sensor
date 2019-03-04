@@ -1,0 +1,27 @@
+<launch>
+  <rosparam>
+    robot_hardware: hw2
+    sensor_hardware: sensor1
+    hw1:
+      type: kuka_rsi_hw_interface/KukaHardwareInterface
+    hw2:
+      type: combined_robot_hw_tests/MyRobotHW1
+    sensor1:
+      type: force_torque_sensor/ForceTorqueSensorHWHandler
+    sensor2:
+      type: force_torque_sensor/ForceTorqueSensorSim
+    rsi:
+      listen_address: "127.0.0.1"
+      listen_port: 49152
+    controller_joint_names: 
+      - joint_a1
+      - joint_a2
+      - joint_a3
+      - joint_a4
+      - joint_a5
+      - joint_a6
+  </rosparam>
+
+  <test test-name="robot_and_sensor_hw_test" pkg="force_torque_sensor" type="robot_and_sensor_hw_test"/>
+  
+</launch> 

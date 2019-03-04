@@ -47,8 +47,7 @@
 
 using namespace force_torque_sensor;
 
-//ForceTorqueSensorHWHandler::ForceTorqueSensorHWHandler() : calibration_params_ {nh_.getNamespace() + "/Calibration/Offset"}, CS_params_ {nh_.getNamespace() }, HWComm_params_ {nh_.getNamespace() + "/HWComm"}, FTS_params_ {nh_.getNamespace() + "/FTS"}, pub_params_ {nh_.getNamespace() + "/Publish"}, node_params_ {nh_.getNamespace() + "/Node"}, gravity_params_ {nh_.getNamespace() + "/GravityCompensation/params"} {ROS_WARN("0");}
-ForceTorqueSensorHWHandler::ForceTorqueSensorHWHandler(){};
+ForceTorqueSensorHWHandler::ForceTorqueSensorHWHandler() : calibration_params_ {nh_.getNamespace() + "/Calibration/Offset"}, CS_params_ {nh_.getNamespace() }, HWComm_params_ {nh_.getNamespace() + "/HWComm"}, FTS_params_ {nh_.getNamespace() + "/FTS"}, pub_params_ {nh_.getNamespace() + "/Publish"}, node_params_ {nh_.getNamespace() + "/Node"}, gravity_params_ {nh_.getNamespace() + "/GravityCompensation/params"} {ROS_WARN("0");}
 
 bool ForceTorqueSensorHWHandler::init(ros::NodeHandle &root_nh, ros::NodeHandle &sensor_hw_nh)
 {ROS_WARN("1");

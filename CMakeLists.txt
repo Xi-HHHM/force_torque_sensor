@@ -20,6 +20,8 @@ find_package(catkin REQUIRED COMPONENTS
   tf2
   tf2_geometry_msgs
   tf2_ros
+  robot_and_sensor_hw
+  kuka_rsi_hw_interface
 )
 
 find_package(Eigen3)
@@ -68,7 +70,7 @@ generate_messages(
 ###################################
 catkin_package(
  INCLUDE_DIRS include
- CATKIN_DEPENDS geometry_msgs iirob_filters message_runtime roscpp std_msgs std_srvs rospy realtime_tools pluginlib tf2 tf2_ros hardware_interface
+ CATKIN_DEPENDS geometry_msgs iirob_filters message_runtime roscpp std_msgs std_srvs rospy realtime_tools pluginlib tf2 tf2_ros hardware_interface robot_and_sensor_hw kuka_rsi_hw_interface
  DEPENDS Eigen3
  LIBRARIES ${PROJECT_NAME} ${PROJECT_NAME}_sim ${PROJECT_NAME}_handler
 )
@@ -106,6 +108,17 @@ target_link_libraries(${PROJECT_NAME}_handler ${catkin_LIBRARIES} ${Eigen3_LIBRA
 
 add_executable(${PROJECT_NAME}_node src/force_torque_sensor_node.cpp)
 target_link_libraries(${PROJECT_NAME}_node ${PROJECT_NAME} ${catkin_LIBRARIES} ${Eigen3_LIBRARIES})
+
+if(CATKIN_ENABLE_TESTING)
+
+  find_package(rostest REQUIRED)
+  add_rostest_gtest(robot_and_sensor_hw_test
+    test/robot_and_sensor_hw_test.test
+    test/robot_and_sensor_hw_test.cpp
+  )
+  target_link_libraries(robot_and_sensor_hw_test ${PROJECT_NAME} ${catkin_LIBRARIES} ${Eigen3_LIBRARIES})
+
+endif()
 
 #############
 ## Install ##
