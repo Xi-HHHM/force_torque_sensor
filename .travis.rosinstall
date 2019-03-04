@@ -14,3 +14,7 @@
     uri: 'https://github.com/iirob/kuka_experimental.git'
     local-name: kuka_experimental
     version: indigo-internal
+- git:
+    uri: 'https://github.com/KITrobotics/robot_and_sensor_hw.git'
+    local-name: robot_and_sensor_hw
+    version: testing
