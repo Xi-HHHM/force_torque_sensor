@@ -26,6 +26,12 @@ def calculate_sensor_offsets():
         controller_topic = '/position_trajectory_controller/command'
         calcOffset_service = '/CalculateOffsets'
         setOffset_service = '/SetSensorOffset'
+    elif robot == "ur":
+        # still to control the topics and the paths in parameter server
+        joint_names = rospy.get_param("/hardware_interface/joints")
+        controller_topic = "/pos_based_pos_traj_controller/command"
+        calcOffset_service = '/CalculateOffsets'
+        setOffset_service = '/SetSensorOffset'
     else:
         joint_names = rospy.get_param('/arm/joint_names')
         controller_topic = '/arm/joint_trajectory_controller/command'
@@ -46,6 +52,10 @@ def calculate_sensor_offsets():
     poses_kuka = [[0.0, -1.5707963, 1.5707963, 0.0, -1.5707963, 0.0],
              [0.0, -1.5707963, 1.5707963, 0.0, 1.5707963, 0.0]]
 
+    # control the joint pose
+    poses_ur = [[1.5707963, -1.5707963, 1.5707963, -1.5707963, 1.5707963, 0.0],
+             [1.5707963, -1.5707963, 1.5707963, -1.5707963, -1.5707963, 0.0]]
+
     measurement = Wrench()
     
     for i in range(0,len(poses)):
@@ -57,6 +67,8 @@ def calculate_sensor_offsets():
         point.time_from_start = rospy.Duration(2.5)
         if robot == "kuka":
             point.positions = poses_kuka[i]
+        elif robot == "ur":
+            point.positions = poses_ur[i]
         else:
             point.positions = poses[i]
         
