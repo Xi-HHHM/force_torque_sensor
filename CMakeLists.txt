@@ -85,7 +85,9 @@ include_directories(
   ${Eigen3_INCLUDE_DIRS}
 )
 
-add_library(${PROJECT_NAME} src/force_torque_sensor_handle.cpp )
+# this line edited by XH #
+add_library(${PROJECT_NAME} src/force_torque_sensor_handle.cpp src/fts_filtering.cpp)
+
 add_dependencies(${PROJECT_NAME}
   ${PROJECT_NAME}_gencfg  # For dynamic_reconfigure
   ${PROJECT_NAME}_generate_messages_cpp
@@ -99,6 +101,10 @@ target_link_libraries(${PROJECT_NAME}_sim ${catkin_LIBRARIES} ${Eigen3_LIBRARIES
 
 add_executable(${PROJECT_NAME}_node src/force_torque_sensor_node.cpp)
 target_link_libraries(${PROJECT_NAME}_node ${PROJECT_NAME} ${catkin_LIBRARIES} ${Eigen3_LIBRARIES})
+
+# this 2 lines added by XH #
+add_executable(${PROJECT_NAME}_filtering src/force_torque_filtering_node.cpp)
+target_link_libraries(${PROJECT_NAME}_filtering ${PROJECT_NAME} ${catkin_LIBRARIES} ${Eigen3_LIBRARIES})
 
 #############
 ## Install ##

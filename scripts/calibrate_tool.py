@@ -23,9 +23,9 @@ def calibrate_tool():
         joint_names = rospy.get_param('/controller_joint_names')
         controller_topic = '/position_trajectory_controller/command'
         calcOffset_service = '/CalculateAverageMasurement'
-    elif roboot == "ur":
-        joint_names = rospy.get_param('/joint_names')
-        controller_topic = 'joint_trajectory_controller/command'
+    elif robot == "ur":
+        joint_names = rospy.get_param('/hardware_interface/joints')
+        controller_topic = '/pos_based_pos_traj_controller/command'
         calcOffset_service = '/CalculateAverageMasurement'
     else:
         joint_names = rospy.get_param('/arm/joint_names')
@@ -33,7 +33,8 @@ def calibrate_tool():
         calcOffset_service = '/arm/CalculateAverageMasurement'
 
     trajectory_pub = rospy.Publisher(controller_topic, JointTrajectory, latch=True, queue_size=1)
-    average_measurements_srv = rospy.ServiceProxy(calcOffset_service, CalculateAverageMasurement)
+    #rospy.wait_for_service(calcOffset_service)
+    #average_measurements_srv = rospy.ServiceProxy(calcOffset_service, CalculateAverageMasurement)
 
     # Posees
     poses = [[0.0, 0.0, 1.5707963, 0.0, -1.5707963, 0.0],
@@ -45,8 +46,8 @@ def calibrate_tool():
                    [0.0, -1.5707963, 1.5707963, 0.0, 0.0, 0.0]]
 
     poses_ur = [[1.5707963, -1.5707963, 1.5707963, -1.5707963, -1.5707963, 0.0], # home
-                [1.5707963, -1.5707963, 1.5707963, -1.5707963,  0.0,       0.0]  # middle
-                [1.5707963, -1.5707963, 1.5707963, -1.5707963, -1.5707963, 0.0]] # top
+                [1.5707963, -1.5707963, 1.5707963, -1.5707963,  0.0,       0.0],  # middle
+                [1.5707963, -1.5707963, 1.5707963, -1.5707963, 1.5707963, 0.0]] # top
 
     measurement = []
     
@@ -72,9 +73,9 @@ def calibrate_tool():
         
         rospy.loginfo("Calculating tool force.")
         #ret = average_measurements_srv(500, 0.01)
-        ret = average_measurements_srv(500, 0.01, "fts_base_link")
+        #ret = average_measurements_srv(500, 0.01, fts_frame)
 
-        measurement.append(ret.measurement)
+        #measurement.append(ret.measurement)
 
     CoG = Vector3()
 
@@ -91,9 +92,9 @@ def calibrate_tool():
     
     if store_to_file:
         if robot == "ur":
-            call("rosparam dump -v `rospack find ipr_ur_bringup`/tools/urdf/" + tool_name + "/" + robot_name + "_gravity.yaml /temp/tool", shell=True
-        else        
-            call("rosparam dump -v `rospack find iirob_description`/tools/urdf/" + tool_name + "/" + robot_name + "_gravity.yaml /temp/tool", shel       cue)
+            call("rosparam dump -v `rospack find ipr_ur_bringup`/tools/urdf/" + tool_name + "/" + robot_name + "_gravity.yaml /temp/tool", shell=True)
+        else:        
+            call("rosparam dump -v `rospack find iirob_description`/tools/urdf/" + tool_name + "/" + robot_name + "_gravity.yaml /temp/tool", shell=True)
 
 
 if __name__ == "__main__":

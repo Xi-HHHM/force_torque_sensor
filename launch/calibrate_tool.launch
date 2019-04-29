@@ -5,12 +5,15 @@
   <arg name="store_to_file" default="true"/>
   <arg name="robot_name" default="r5"/>
   <arg name="robot" default="schunk"/>
+  <arg name="fts_frame" default="fts_base_link"/>
   
   <node pkg="force_torque_sensor" type="calibrate_tool.py" name="calibrate_tool" cwd="node" respawn="false" output="screen">
       <param name="tool_name" value="$(arg tool_name)"/>
       <param name="store_to_file" value="$(arg store_to_file)"/>
       <param name="robot_name" value="$(arg robot_name)"/>
       <param name="robot" value="$(arg robot)"/>
+      <param name="fts_frame" value="$(arg fts_frame)"/>
+      
   </node>
 
 </launch>
