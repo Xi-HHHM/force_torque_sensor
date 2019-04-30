@@ -32,9 +32,7 @@ typedef unsigned char uint8_t;
 #include <iostream>
 
 #include <dynamic_reconfigure/server.h>
-#include <force_torque_sensor/CoordinateSystemCalibrationParameters.h>
 #include <force_torque_sensor/HWCommunicationConfigurationParameters.h>
-#include <force_torque_sensor/FTSConfigurationParameters.h>
 #include <force_torque_sensor/PublishConfigurationParameters.h>
 #include <force_torque_sensor/NodeConfigurationParameters.h>
 #include <force_torque_sensor/CalibrationParameters.h>
@@ -59,8 +57,6 @@ namespace force_torque_sensor
         realtime_tools::RealtimePublisher<geometry_msgs::WrenchStamped> *low_pass_pub_;
         realtime_tools::RealtimePublisher<geometry_msgs::WrenchStamped> *moving_mean_pub_;
 
-        force_torque_sensor::CoordinateSystemCalibrationParameters CS_params_;
-        force_torque_sensor::FTSConfigurationParameters FTS_params_;
         force_torque_sensor::PublishConfigurationParameters pub_params_;
         force_torque_sensor::NodeConfigurationParameters node_params_;
         force_torque_sensor::CalibrationParameters calibration_params_;
@@ -128,7 +124,7 @@ namespace force_torque_sensor
         geometry_msgs::Wrench m_calibOffset;
         
 
-        void init_sensor(std::string &msg, bool &success);
+        void init_sensor();
         // bool srvCallback_Init(std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &res);
         bool srvCallback_CalculateOffset(force_torque_sensor::CalculateSensorOffset::Request &req, force_torque_sensor::CalculateSensorOffset::Response &res);
         bool srvCallback_CalculateAverageMasurement(force_torque_sensor::CalculateAverageMasurement::Request &req, force_torque_sensor::CalculateAverageMasurement::Response &res);
@@ -139,7 +135,7 @@ namespace force_torque_sensor
         
         geometry_msgs::Wrench makeAverageMeasurement(uint number_of_measurements, double time_between_meas, std::string frame_id="");
         bool calibrate(bool apply_after_calculation,  geometry_msgs::Wrench *new_offset);
-        void RawDataCallBack(const geometry_msgs::WrenchStamped::ConstPtr& msg);
+        
 
 
 
@@ -148,6 +144,7 @@ namespace force_torque_sensor
         void prepareNode(std::string output_frame);
         void pullFTData(const ros::TimerEvent &event);
         void filterFTData();
+        void RawDataCallBack(const geometry_msgs::WrenchStamped::ConstPtr& msg);
         void reconfigureCalibrationRequest(force_torque_sensor::CalibrationConfig& config, uint32_t level);
         bool transform_wrench(std::string goal_frame, std::string source_frame, geometry_msgs::Wrench wrench, geometry_msgs::Wrench& transformed);
 

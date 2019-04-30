@@ -15,7 +15,7 @@ def calculate_sensor_offsets():
     rospy.init_node('calculate_offsets')
     
     package_to_store = rospy.get_param('~package_to_store')
-    store_to_file = rospy.get_param('~store_to_file')
+    store_to_file = rospy.get_param('~store_to_file', True)
     scenario = rospy.get_param('~scenario')
     robot = rospy.get_param('~robot')
     set_calculated_offset = rospy.get_param('~set_calculated_offset')
@@ -30,8 +30,8 @@ def calculate_sensor_offsets():
         # still to control the topics and the paths in parameter server
         joint_names = rospy.get_param("/hardware_interface/joints")
         controller_topic = "/pos_based_pos_traj_controller/command"
-        calcOffset_service = '/CalculateOffsets'
-        setOffset_service = '/SetSensorOffset'
+        calcOffset_service = '/fts/CalculateOffsets'
+        setOffset_service = '/fts/SetSensorOffset'
     else:
         joint_names = rospy.get_param('/arm/joint_names')
         controller_topic = '/arm/joint_trajectory_controller/command'
